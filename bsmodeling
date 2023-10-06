@@ -1,0 +1,81 @@
+public class bsmodeling{
+	public static void main(String[] args) {
+		bs(90,95,1,.02,.15);
+	}
+
+	private static void bs(double S, double K, double T, double r, double v) {
+		double d1= (Math.log(S/K)+(r+v*v/2)*T)/(v*Math.sqrt(T));
+		double d2=(Math.log(S/K)+(r-v*v/2)*T)/(v*Math.sqrt(T));
+		Call(S,r,T,K,d1,d2);
+		Put(S,r,T,K,d1,d2);
+		detlaC( d1);
+		deltaP (d1);
+		gammaC( S,  K,  T,  r,  v, d1);
+		gammaP(d1,v,S,T);
+		thetaC( S,  K,  T,  r,  v, d1,d2);
+		thetaP(v,S,d1,T,r,K,d2);
+		vegaC( S,  K,  T,  r,  v, d1);
+		vegaP(S,  K,  T,  r,  v, d1);
+		rhoC( S,  K,  T,  r,  v, d2);
+		rhoP( S,  K,  T,  r,  v, d2);
+	}
+
+	private static void rhoP(double s, double k, double t, double r, double v, double d2) {
+		// TODO Auto-generated method stub
+		System.out.println("Put Rho: "+ -t*Math.exp(-r*t)*k*Gaussian.cdf(-d2));
+	}
+
+	private static void vegaP(double s, double k, double t, double r, double v, double d1) {
+		// TODO Auto-generated method stub
+		System.out.println("Put Vega: "+ s*Gaussian.pdf(d1)*Math.sqrt(t));
+	}
+
+	private static void thetaP(double v, double s, double d1, double t, double r, double k, double d2) {
+		// TODO Auto-generated method stub
+		System.out.println("Put Theta: "+ (-v*s*Gaussian.pdf(d1)/(2*Math.sqrt(t))+r*Math.exp(-r*t)*k*Gaussian.cdf(-d2)));
+	}
+
+	private static void gammaP(double d1, double v, double s, double t) {
+		// TODO Auto-generated method stub
+		System.out.println("Put Gamma: "+Gaussian.pdf(d1)/(v*s*Math.sqrt(t)));
+	}
+
+	private static void Call(double s, double r, double t, double k, double d1, double d2) {
+		// TODO Auto-generated method stub
+		System.out.println("Call price: "+ (s*Gaussian.cdf(d1)-Math.exp(-r*t)*k*Gaussian.cdf(d2)));
+	}
+
+	private static void Put(double s, double r, double t, double k, double d1, double d2) {
+		// TODO Auto-generated method stub
+		System.out.println("Put price: "+ (-s*Gaussian.cdf(-d1)+Math.exp(-r*t)*k*Gaussian.cdf(-d2)));
+	}
+
+	private static void deltaP(double d1) {
+		// TODO Auto-generated method stub
+		System.out.println("Put delta: "+ (Gaussian.cdf(d1)-1));
+	}
+
+	private static void rhoC(double s, double k, double t, double r, double v, double d2) {
+		// TODO Auto-generated method stub
+		System.out.println("Call Rho: "+ t*Math.exp(-r*t)*k*Gaussian.cdf(d2));
+		
+	}
+
+	private static void vegaC(double s, double k, double t, double r, double v,double d1) {
+		// TODO Auto-generated method stub
+		System.out.println("Call Vega: "+ s*Gaussian.pdf(d1)*Math.sqrt(t));
+	}
+
+	private static void thetaC(double s, double k, double t, double r, double v, double d1,double d2) {
+		System.out.println("Call Theta: "+ (-v*s*Gaussian.pdf(d1)/(2*Math.sqrt(t))-r*Math.exp(-r*t)*k*Gaussian.cdf(d2)));
+	}
+
+	private static void gammaC(double s, double k, double t, double r, double v, double d1) {
+		System.out.println("Call Gamma: "+Gaussian.pdf(d1)/(v*s*Math.sqrt(t)));
+	}
+
+	private static void detlaC(double d1) {
+		System.out.println("Call delta: "+Gaussian.cdf(d1));
+	}
+
+}
